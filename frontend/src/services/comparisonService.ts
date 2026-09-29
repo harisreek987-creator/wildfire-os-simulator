@@ -113,9 +113,8 @@ function mapBackendToFrontendComparison(res: BackendComparisonResponse): Detecti
 export async function fetchDetectionComparison(
   params?: ComparisonParams
 ): Promise<DetectionComparisonData> {
-  const host = window.location.host
-  const protocol = window.location.protocol
-  const baseUrl = `${protocol}//${host}`
+  const envApiBase = import.meta.env.VITE_API_BASE_URL as string | undefined
+  const baseUrl = envApiBase || `${window.location.protocol}//${window.location.host}`
 
   const requestPayload: Record<string, unknown> = {}
   if (params?.ignitionRow !== undefined) requestPayload.ignition_row = params.ignitionRow

@@ -97,9 +97,15 @@ export class SimulationSocketService {
   private reconnectTimer: number | null = null
 
   constructor() {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const host = window.location.host
-    this.url = `${protocol}//${host}/ws/simulation`
+    const envWsUrl = import.meta.env.VITE_WS_URL as string | undefined
+    if (envWsUrl) {
+      this.url = envWsUrl
+    } else {
+      // Dev fallback: derive from current host so Vite proxy works transparently
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+      const host = window.location.host
+      this.url = `${protocol}//${host}/ws/simulation`
+    }
   }
 
   public connect(): void {
