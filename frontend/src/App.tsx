@@ -170,6 +170,9 @@ export const App: React.FC = () => {
           schedulerPolicy={sim.schedulerPolicy}
           simulationTime={sim.simulationTime}
           isRunning={sim.isRunning}
+          executionHistory={sim.executionHistory}
+          resources={sim.resources}
+          events={sim.events}
         />
       ) : (
         <PlaceholderView

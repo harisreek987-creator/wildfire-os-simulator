@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import {
   simulationSocketService,
   type ConnectionStatus,
@@ -14,6 +14,7 @@ import type {
   EventLogEntry,
   ResourceItem,
   OSState,
+  ExecutionTickRecord,
 } from '../types/simulation'
 import { generateMockGrid } from '../data/mockData'
 
@@ -38,6 +39,7 @@ export interface UseSimulationReturn {
   runningProcessName: string | null
   schedulerPolicy: string
   osState: OSState | null
+  executionHistory: ExecutionTickRecord[]
   start: () => void
   pause: () => void
   resume: () => void
@@ -75,6 +77,8 @@ export const useSimulation = (): UseSimulationReturn => {
   const [runningProcessName, setRunningProcessName] = useState<string | null>(null)
   const [schedulerPolicy, setSchedulerPolicy] = useState<string>('PRIORITY')
   const [osState, setOsState] = useState<OSState | null>(null)
+  const [executionHistory, setExecutionHistory] = useState<ExecutionTickRecord[]>([])
+  const lastRecordedTickRef = useRef<number>(-1)
 
   useEffect(() => {
     simulationSocketService.connect()
@@ -127,10 +131,10 @@ export const useSimulation = (): UseSimulationReturn => {
               rawState === 'burning'
                 ? 'burning'
                 : rawState === 'burned'
-                ? 'burned'
-                : rawState === 'water'
-                ? 'water'
-                : 'healthy'
+                  ? 'burned'
+                  : rawState === 'water'
+                    ? 'water'
+                    : 'healthy'
 
             let sensorId: string | undefined
             for (const s of currentSensors) {
@@ -224,6 +228,31 @@ export const useSimulation = (): UseSimulationReturn => {
           schedulerPolicy: backendState.os.scheduler_policy || 'PRIORITY',
         })
       }
+
+      // Update Rolling 40-Tick Execution History
+      if (backendState.simulation_time === 0) {
+        lastRecordedTickRef.current = 0
+        setExecutionHistory([])
+      } else if (backendState.simulation_time > lastRecordedTickRef.current) {
+        lastRecordedTickRef.current = backendState.simulation_time
+        const runningPid = backendState.os?.running_process_pid ?? null
+        const runningName =
+          backendState.os?.running_process_name ??
+          (runningPid ? `PID ${runningPid}` : 'CPU Idle')
+
+        setExecutionHistory((prev) => {
+          const newEntry: ExecutionTickRecord = {
+            tick: backendState.simulation_time,
+            pid: runningPid,
+            processName: runningName,
+          }
+          const updated = [...prev, newEntry]
+          if (updated.length > 40) {
+            return updated.slice(updated.length - 40)
+          }
+          return updated
+        })
+      }
     })
 
     return () => {
@@ -246,6 +275,8 @@ export const useSimulation = (): UseSimulationReturn => {
   }, [])
 
   const reset = useCallback(() => {
+    lastRecordedTickRef.current = -1
+    setExecutionHistory([])
     simulationSocketService.send({ type: 'reset' })
   }, [])
 
@@ -290,6 +321,7 @@ export const useSimulation = (): UseSimulationReturn => {
     runningProcessName,
     schedulerPolicy,
     osState,
+    executionHistory,
     start,
     pause,
     resume,

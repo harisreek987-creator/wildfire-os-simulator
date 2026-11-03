@@ -47,6 +47,12 @@ export interface VirtualProcess {
   waitingReason?: string | null
 }
 
+export interface ExecutionTickRecord {
+  tick: number
+  pid: number | null
+  processName: string
+}
+
 export type EventSeverity = 'info' | 'warning' | 'alert' | 'success'
 
 export interface EventLogEntry {

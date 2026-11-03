@@ -1,6 +1,14 @@
 import React from 'react'
-import type { VirtualProcess } from '../../types/simulation'
+import type {
+  VirtualProcess,
+  ExecutionTickRecord,
+  ResourceItem,
+  EventLogEntry,
+} from '../../types/simulation'
 import { PCBTable } from './PCBTable'
+import { SchedulerTimeline } from './SchedulerTimeline'
+import { ResourceMutexPanel } from './ResourceMutexPanel'
+import { EventLog } from './EventLog'
 import {
   Cpu,
   Play,
@@ -20,6 +28,9 @@ interface OSMonitorViewProps {
   schedulerPolicy: string
   simulationTime: number
   isRunning: boolean
+  executionHistory: ExecutionTickRecord[]
+  resources: ResourceItem[]
+  events: EventLogEntry[]
 }
 
 export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
@@ -28,6 +39,9 @@ export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
   runningProcessName,
   schedulerPolicy,
   simulationTime,
+  executionHistory,
+  resources,
+  events,
 }) => {
   // 1. Process summary counts dynamically calculated from actual processes array
   const totalCount = processes.length
@@ -68,7 +82,7 @@ export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* 1. OS Monitor Top Header & Telemetry Summary Counters (Section 5) */}
+      {/* 1. OS Monitor Top Header & Telemetry Summary Counters */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 sm:p-4 flex flex-col gap-3 shadow-xl">
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800 text-xs font-mono">
           <div className="flex items-center gap-2.5">
@@ -162,7 +176,7 @@ export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
         </div>
       </div>
 
-      {/* 2. Educational Preemption Banner (Section 10) */}
+      {/* 2. Educational Preemption Banner */}
       <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl flex items-start gap-3 text-xs font-mono shadow-md">
         <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
         <div className="space-y-1 text-slate-300">
@@ -179,9 +193,12 @@ export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
         </div>
       </div>
 
-      {/* 3. 2-Column Scheduling Layout: Running Process (Hero) & Priority Queues */}
+      {/* 3. Full-Width PCB Table */}
+      <PCBTable processes={processes} runningProcessPid={runningProcessPid} />
+
+      {/* 4. 2-Column Scheduling Layout: Running Process (Hero) & Priority Queues */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start font-mono">
-        {/* Left Sub-Column: Current Running Process Hero (Section 7) */}
+        {/* Left Sub-Column: Current Running Process Hero */}
         <div className="lg:col-span-5 flex flex-col gap-3">
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col gap-3 shadow-xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2.5 text-xs">
@@ -260,7 +277,7 @@ export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
               </div>
             ) : (
               <div className="p-6 bg-slate-950 border border-slate-800 rounded-lg text-center space-y-2">
-                <Cpu className="w-8 h-8 text-slate-600 mx-auto" />
+                <Cpu className="w-8 h-8 text-slate-700 mx-auto" />
                 <div className="text-xs font-bold text-slate-400">CPU IDLE</div>
                 <p className="text-[11px] text-slate-500 font-sans max-w-xs mx-auto">
                   No process is currently occupying the virtual CPU. Ready queue is awaiting simulation start.
@@ -273,9 +290,9 @@ export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
           </div>
         </div>
 
-        {/* Right Sub-Column: Priority Ready Queue & Waiting Queue (Sections 8 & 9) */}
+        {/* Right Sub-Column: Priority Ready Queue & Waiting Queue */}
         <div className="lg:col-span-7 flex flex-col gap-4">
-          {/* Priority-Based Ready Queue (Section 8) */}
+          {/* Priority-Based Ready Queue */}
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col gap-3 shadow-xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2.5 text-xs">
               <div className="flex items-center gap-2 font-bold text-slate-200 uppercase tracking-wider">
@@ -315,13 +332,12 @@ export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
 
                     <div className="flex items-center gap-2 shrink-0">
                       <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold border ${
-                          proc.priorityLevel === 1
+                        className={`px-2 py-0.5 rounded text-[10px] font-bold border ${proc.priorityLevel === 1
                             ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
                             : proc.priorityLevel === 2
-                            ? 'bg-orange-500/20 text-orange-300 border-orange-500/40'
-                            : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                        }`}
+                              ? 'bg-orange-500/20 text-orange-300 border-orange-500/40'
+                              : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                          }`}
                       >
                         P{proc.priorityLevel} {proc.priority}
                       </span>
@@ -333,7 +349,7 @@ export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
             )}
           </div>
 
-          {/* Waiting / Blocked Queue (Section 9) */}
+          {/* Waiting / Blocked Queue */}
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col gap-3 shadow-xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2.5 text-xs">
               <div className="flex items-center gap-2 font-bold text-slate-200 uppercase tracking-wider">
@@ -384,7 +400,7 @@ export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
               </div>
             )}
 
-            {/* Completed Processes (if any, represented separately per Section 9) */}
+            {/* Completed Processes */}
             {completedQueue.length > 0 && (
               <div className="pt-2 border-t border-slate-800/80">
                 <div className="text-[10px] text-slate-400 mb-1.5 font-bold uppercase">
@@ -413,8 +429,21 @@ export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
         </div>
       </div>
 
-      {/* 4. Full-Width PCB Table (Section 6) */}
-      <PCBTable processes={processes} runningProcessPid={runningProcessPid} />
+      {/* 5. Rolling 40-Tick Gantt Execution Timeline */}
+      <SchedulerTimeline
+        history={executionHistory}
+        currentPid={runningProcessPid}
+        currentTick={simulationTime}
+      />
+
+      {/* 6. Virtual OS Shared Resource Mutex Allocator */}
+      <ResourceMutexPanel
+        resources={resources}
+        processes={processes}
+      />
+
+      {/* 7. System Event Log & IPC Dispatcher (Bottom) */}
+      <EventLog logs={events} />
     </div>
   )
 }
