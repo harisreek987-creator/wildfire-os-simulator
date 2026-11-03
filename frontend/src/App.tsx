@@ -4,6 +4,7 @@ import { DashboardLayout } from './components/layout/DashboardLayout'
 import { PlaceholderView } from './components/layout/PlaceholderView'
 import { IncidentStatus } from './components/overview/IncidentStatus'
 import { ResponseReadiness } from './components/overview/ResponseReadiness'
+import { OSMonitorView } from './components/os/OSMonitorView'
 import { FireGrid } from './components/simulation/FireGrid'
 import { SimulationControls, type ScenarioPreset } from './components/simulation/SimulationControls'
 import { WindControls } from './components/simulation/WindControls'
@@ -161,6 +162,15 @@ export const App: React.FC = () => {
             </div>
           </div>
         </div>
+      ) : currentTab === 'os-monitor' ? (
+        <OSMonitorView
+          processes={sim.processes}
+          runningProcessPid={sim.runningProcessPid}
+          runningProcessName={sim.runningProcessName}
+          schedulerPolicy={sim.schedulerPolicy}
+          simulationTime={sim.simulationTime}
+          isRunning={sim.isRunning}
+        />
       ) : (
         <PlaceholderView
           tab={currentTab}
