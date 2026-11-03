@@ -1,5 +1,13 @@
 export type CellState = 'healthy' | 'burning' | 'burned' | 'water'
 
+export type NavigationTab =
+  | 'overview'
+  | 'os-monitor'
+  | 'analytics'
+  | 'sensors'
+  | 'controls'
+  | 'system'
+
 export interface GridCell {
   x: number
   y: number
