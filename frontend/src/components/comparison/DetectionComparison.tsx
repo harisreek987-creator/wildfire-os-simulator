@@ -30,7 +30,7 @@ interface DetectionComparisonProps {
 
 export const DetectionComparison: React.FC<DetectionComparisonProps> = ({ initialData }) => {
   const [data, setData] = useState<DetectionComparisonData | null>(initialData || null)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(!initialData)
   const [delay, setDelay] = useState<number>(6)
   const [error, setError] = useState<string | null>(null)
 
@@ -57,10 +57,32 @@ export const DetectionComparison: React.FC<DetectionComparisonProps> = ({ initia
   }
 
   useEffect(() => {
-    if (!data) {
-      runExperiment(delay)
+    let isMounted = true
+    if (!initialData) {
+      fetchDetectionComparison({
+        lateDetectionDelay: delay,
+        seed: 42,
+        ignitionRow: 10,
+        ignitionCol: 10,
+        spreadProbability: 0.35,
+        burnDuration: 3,
+        maxSteps: 35,
+      })
+        .then((result) => {
+          if (isMounted) setData(result)
+        })
+        .catch((err) => {
+          console.error('Failed to run detection comparison experiment:', err)
+          if (isMounted) setError('Unable to reach simulation engine. Please check backend connection.')
+        })
+        .finally(() => {
+          if (isMounted) setLoading(false)
+        })
     }
-  }, [])
+    return () => {
+      isMounted = false
+    }
+  }, [initialData, delay])
 
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col gap-4 shadow-xl">

@@ -5,12 +5,16 @@ import { PlaceholderView } from './components/layout/PlaceholderView'
 import { IncidentStatus } from './components/overview/IncidentStatus'
 import { ResponseReadiness } from './components/overview/ResponseReadiness'
 import { OSMonitorView } from './components/os/OSMonitorView'
+import { AnalyticsView } from './components/analytics/AnalyticsView'
+import { SensorsView } from './components/sensors/SensorsView'
+import { ControlsView } from './components/simulation/ControlsView'
+import { SystemView } from './components/system/SystemView'
 import { FireGrid } from './components/simulation/FireGrid'
 import { SimulationControls, type ScenarioPreset } from './components/simulation/SimulationControls'
 import { WindControls } from './components/simulation/WindControls'
 
 import { useSimulation } from './hooks/useSimulation'
-import type { WindDirection, WindStrength, GridCell, NavigationTab } from './types/simulation'
+import type { WindDirection, WindStrength, GridCell, NavigationTab, SimulationStats } from './types/simulation'
 
 export const App: React.FC = () => {
   // Connect real WebSocket simulation hook at root level (preserved across tab navigation)
@@ -25,6 +29,29 @@ export const App: React.FC = () => {
     : sim.simulationTime > 0
     ? 'PAUSED'
     : 'IDLE'
+
+  // Live aggregated telemetry statistics for Analytics view
+  const stats: SimulationStats = {
+    burningCells: sim.burningCells,
+    burnedCells: sim.burnedCells,
+    healthyCells: sim.healthyCells,
+    waterCells: sim.waterCells,
+    totalCells: sim.totalCells,
+    detectionTimeSeconds: sim.firstDetectionTime,
+    fireIntensity:
+      sim.burningCells > 15
+        ? 'CRITICAL'
+        : sim.burningCells > 5
+        ? 'MODERATE'
+        : sim.burningCells > 0
+        ? 'LOW'
+        : 'NONE',
+    activeSensors: sim.sensors.filter((s) => s.status === 'DETECTED').length,
+    totalSensors: sim.sensors.length,
+    elapsedTime: `${sim.simulationTime}s`,
+    simulationSpeed: sim.speed,
+    status: simStatus,
+  }
 
   // Interactive control handlers forwarding commands to Python backend via WebSocket
   const handleStart = () => {
@@ -173,6 +200,32 @@ export const App: React.FC = () => {
           executionHistory={sim.executionHistory}
           resources={sim.resources}
           events={sim.events}
+        />
+      ) : currentTab === 'analytics' ? (
+        <AnalyticsView stats={stats} />
+      ) : currentTab === 'sensors' ? (
+        <SensorsView sensors={sim.sensors} />
+      ) : currentTab === 'controls' ? (
+        <ControlsView
+          simStatus={simStatus}
+          speed={sim.speed}
+          wind={sim.wind}
+          simulationTime={sim.simulationTime}
+          onStart={handleStart}
+          onPause={handlePause}
+          onResume={handleResume}
+          onReset={handleReset}
+          onStep={handleStep}
+          onSpeedChange={handleSpeedChange}
+          onWindDirectionChange={handleWindDirectionChange}
+          onWindStrengthChange={handleWindStrengthChange}
+          onSelectScenario={handleSelectScenario}
+          onIgniteCoord={(r, c) => sim.ignite(r, c)}
+        />
+      ) : currentTab === 'system' ? (
+        <SystemView
+          connectionStatus={sim.connectionStatus}
+          onReconnect={sim.reconnect}
         />
       ) : (
         <PlaceholderView
