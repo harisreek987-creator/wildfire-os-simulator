@@ -9,8 +9,9 @@ interface SensorsViewProps {
 export const SensorsView: React.FC<SensorsViewProps> = ({ sensors }) => {
   const [selectedSensorId, setSelectedSensorId] = useState<string>('S-02')
 
-  const activeCount = sensors.filter((s) => s.status !== 'INACTIVE').length
+  const monitoringCount = sensors.filter((s) => s.status === 'MONITORING').length
   const detectedCount = sensors.filter((s) => s.status === 'DETECTED').length
+  const onlineCount = sensors.filter((s) => s.status !== 'INACTIVE').length
   const selectedSensor =
     sensors.find((s) => s.id === selectedSensorId) ||
     sensors[0] ||
@@ -36,7 +37,7 @@ export const SensorsView: React.FC<SensorsViewProps> = ({ sensors }) => {
                   Perimeter Sensor Array Telemetry
                 </span>
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                  {activeCount}/{sensors.length || 4} NODES ONLINE
+                  {onlineCount}/{sensors.length || 4} NODES ONLINE
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 font-sans hidden sm:block">
@@ -68,7 +69,7 @@ export const SensorsView: React.FC<SensorsViewProps> = ({ sensors }) => {
           </div>
           <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex flex-col justify-between">
             <span className="text-[10px] text-slate-400">MONITORING</span>
-            <span className="text-lg font-black text-emerald-400 mt-1">{activeCount} Active</span>
+            <span className="text-lg font-black text-emerald-400 mt-1">{monitoringCount} Active</span>
           </div>
           <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex flex-col justify-between">
             <span className="text-[10px] text-slate-400">FIRE DETECTIONS</span>

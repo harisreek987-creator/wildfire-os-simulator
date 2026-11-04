@@ -164,7 +164,7 @@ export const DetectionComparison: React.FC<DetectionComparisonProps> = ({ initia
               <span>
                 Peak Fire Reduction:{' '}
                 <strong className="text-emerald-400">
-                  -{data.summary.peakBurningDifference} cells
+                  {data.summary.peakBurningDifference} {Math.abs(data.summary.peakBurningDifference) === 1 ? 'cell' : 'cells'}
                 </strong>
               </span>
               {data.summary.containmentTimeDifference !== null && (

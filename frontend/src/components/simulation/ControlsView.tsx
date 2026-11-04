@@ -358,7 +358,7 @@ export const ControlsView: React.FC<ControlsViewProps> = ({
         <p className="leading-relaxed">
           The Python simulation engine operates on a discrete time-step cellular automaton model. In each tick,
           burning cells evaluate orthogonal and diagonal neighbors using a base ignition probability adjusted by the
-          atmospheric wind vector. When a burning cell enters within sensor radius (R=2 cells), an interrupt event is dispatched
+          atmospheric wind vector. When a burning cell enters within sensor detection perimeter (R=3 to 4 cells), an interrupt event is dispatched
           to the Operating System scheduler, triggering high-priority Emergency Response preemption.
         </p>
       </div>

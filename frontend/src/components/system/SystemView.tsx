@@ -98,7 +98,7 @@ export const SystemView: React.FC<SystemViewProps> = ({
       name: 'Sensor Monitor',
       priority: 'MEDIUM (3)',
       preemption: 'Cooperative / Preemptible',
-      role: 'Executes Euclidean radius checks around IoT sensor nodes (R=2 cells).',
+      role: 'Executes Euclidean radius checks around IoT sensor nodes (R=3 to 4 cells).',
     },
     {
       pid: 103,
@@ -244,7 +244,7 @@ export const SystemView: React.FC<SystemViewProps> = ({
             <div className="space-y-1 text-[11px] text-slate-300">
               <div className="flex justify-between">
                 <span className="text-slate-400">Engine Core:</span>
-                <span className="font-bold text-slate-200">Python 3.14 + FastAPI Server</span>
+                <span className="font-bold text-slate-200">Python 3.10+ / FastAPI Server</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Real-Time Channel:</span>
