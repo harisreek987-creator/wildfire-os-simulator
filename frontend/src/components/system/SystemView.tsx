@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Server,
   Layers,
@@ -8,6 +8,7 @@ import {
   Terminal,
   BookOpen,
   ArrowRight,
+  Activity,
 } from 'lucide-react'
 import type { ConnectionStatus } from '../../services/simulationSocket'
 
@@ -22,6 +23,39 @@ export const SystemView: React.FC<SystemViewProps> = ({
 }) => {
   const isConnected = connectionStatus === 'CONNECTED'
   const isConnecting = connectionStatus === 'CONNECTING'
+  const [apiStatus, setApiStatus] = useState<'OK' | 'OFFLINE' | 'CHECKING'>('CHECKING')
+
+  useEffect(() => {
+    let isMounted = true
+    const envApiBase = import.meta.env.VITE_API_BASE_URL as string | undefined
+    const baseUrl = envApiBase || `${window.location.protocol}//${window.location.host}`
+
+    fetch(`${baseUrl}/health`, { signal: AbortSignal.timeout(3000) })
+      .then((res) => {
+        if (isMounted) {
+          setApiStatus(res.ok ? 'OK' : 'OFFLINE')
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setApiStatus('OFFLINE')
+        }
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [connectionStatus])
+
+  const handleReconnectAll = () => {
+    setApiStatus('CHECKING')
+    onReconnect()
+    const envApiBase = import.meta.env.VITE_API_BASE_URL as string | undefined
+    const baseUrl = envApiBase || `${window.location.protocol}//${window.location.host}`
+    fetch(`${baseUrl}/health`, { signal: AbortSignal.timeout(3000) })
+      .then((res) => setApiStatus(res.ok ? 'OK' : 'OFFLINE'))
+      .catch(() => setApiStatus('OFFLINE'))
+  }
 
   const endpoints = [
     {
@@ -125,7 +159,7 @@ export const SystemView: React.FC<SystemViewProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <div
               className={`px-2.5 py-1 rounded border font-bold text-[11px] flex items-center gap-1.5 ${
                 isConnected
@@ -136,19 +170,30 @@ export const SystemView: React.FC<SystemViewProps> = ({
               }`}
             >
               <Wifi className="w-3.5 h-3.5" />
-              <span>ENGINE: {connectionStatus}</span>
+              <span>WS ENGINE: {connectionStatus}</span>
             </div>
 
-            {!isConnected && (
-              <button
-                type="button"
-                onClick={onReconnect}
-                className="py-1 px-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded transition flex items-center gap-1 text-[11px] cursor-pointer"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-                Reconnect
-              </button>
-            )}
+            <div
+              className={`px-2.5 py-1 rounded border font-bold text-[11px] flex items-center gap-1.5 ${
+                apiStatus === 'OK'
+                  ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                  : apiStatus === 'CHECKING'
+                  ? 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                  : 'bg-red-500/15 text-red-400 border-red-500/30'
+              }`}
+            >
+              <Activity className="w-3.5 h-3.5" />
+              <span>REST API: {apiStatus}</span>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleReconnectAll}
+              className="py-1 px-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded transition flex items-center gap-1 text-[11px] cursor-pointer"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              Probe / Reconnect
+            </button>
           </div>
         </div>
 

@@ -11,7 +11,15 @@ export const SensorsView: React.FC<SensorsViewProps> = ({ sensors }) => {
 
   const activeCount = sensors.filter((s) => s.status !== 'INACTIVE').length
   const detectedCount = sensors.filter((s) => s.status === 'DETECTED').length
-  const selectedSensor = sensors.find((s) => s.id === selectedSensorId) || sensors[0]
+  const selectedSensor =
+    sensors.find((s) => s.id === selectedSensorId) ||
+    sensors[0] ||
+    null
+
+  const avgRadius =
+    sensors.length > 0
+      ? (sensors.reduce((acc, s) => acc + s.radius, 0) / sensors.length).toFixed(2)
+      : '3.25'
 
   return (
     <div className="flex flex-col gap-4 font-mono text-xs">
@@ -68,7 +76,7 @@ export const SensorsView: React.FC<SensorsViewProps> = ({ sensors }) => {
           </div>
           <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex flex-col justify-between">
             <span className="text-[10px] text-slate-400">AVERAGE RADIUS</span>
-            <span className="text-lg font-black text-cyan-400 mt-1">3.25 Cells</span>
+            <span className="text-lg font-black text-cyan-400 mt-1">{avgRadius} Cells</span>
           </div>
         </div>
       </div>
