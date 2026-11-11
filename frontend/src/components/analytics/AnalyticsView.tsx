@@ -67,12 +67,12 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats }) => {
 
       {/* 3. Forest Sector Distribution Breakdown */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col gap-3 shadow-xl">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
           <div className="flex items-center gap-2 font-bold text-slate-200 uppercase tracking-wider">
             <PieChart className="w-4 h-4 text-cyan-400" />
             Live Sector Canopy Partitioning
           </div>
-          <span className="text-[10px] text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+          <span className="hidden sm:inline-block text-[10px] text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
             CANOPY PRESERVATION INDEX
           </span>
         </div>

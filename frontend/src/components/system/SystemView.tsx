@@ -265,18 +265,18 @@ export const SystemView: React.FC<SystemViewProps> = ({
 
       {/* 2. API & Network Protocol Specification */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xl flex flex-col gap-3">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
           <div className="flex items-center gap-2 font-bold text-slate-200 uppercase tracking-wider text-xs">
             <Terminal className="w-4 h-4 text-emerald-400" />
             Communication Protocol &amp; Endpoints
           </div>
-          <span className="text-[11px] text-slate-400">
+          <span className="hidden sm:inline-block text-[11px] text-slate-400">
             Bidirectional WebSocket Stream + Stateless REST Operations
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full min-w-[540px] text-left border-collapse">
             <thead>
               <tr className="border-b border-slate-800 text-[11px] text-slate-400">
                 <th className="py-2 px-3 font-semibold">METHOD</th>
@@ -313,18 +313,18 @@ export const SystemView: React.FC<SystemViewProps> = ({
 
       {/* 3. Virtual OS Subsystem Architecture */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xl flex flex-col gap-3">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
           <div className="flex items-center gap-2 font-bold text-slate-200 uppercase tracking-wider text-xs">
             <Cpu className="w-4 h-4 text-amber-400" />
             Operating System Virtual Process Control Table
           </div>
-          <span className="text-[11px] text-slate-400">
+          <span className="hidden sm:inline-block text-[11px] text-slate-400">
             5 Logical Simulated Processes Running Under Priority Scheduling
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full min-w-[540px] text-left border-collapse">
             <thead>
               <tr className="border-b border-slate-800 text-[11px] text-slate-400">
                 <th className="py-2 px-3 font-semibold">PID</th>
@@ -365,7 +365,7 @@ export const SystemView: React.FC<SystemViewProps> = ({
 
       {/* 4. Viva / Academic OS Concept Study Guide */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xl flex flex-col gap-3">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
           <div className="flex items-center gap-2 font-bold text-slate-200 uppercase tracking-wider text-xs">
             <BookOpen className="w-4 h-4 text-purple-400" />
             OS Viva Presentation Reference &amp; Conceptual Defense

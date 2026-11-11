@@ -81,7 +81,9 @@ export const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ stats }) => {
               {card.icon}
             </div>
 
-            <div className="text-lg font-black tracking-tight">{card.value}</div>
+            <div className="text-base sm:text-lg font-black tracking-tight truncate" title={String(card.value)}>
+              {card.value}
+            </div>
 
             <div className="text-[10px] opacity-70 truncate">{card.subtext}</div>
           </div>

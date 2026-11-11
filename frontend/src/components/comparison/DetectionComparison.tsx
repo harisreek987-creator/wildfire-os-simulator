@@ -93,7 +93,7 @@ export const DetectionComparison: React.FC<DetectionComparisonProps> = ({ initia
           Primary Experiment: Early vs. Late Detection Benchmark
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
           {/* Delay Selector */}
           <div className="flex items-center gap-1.5 text-[11px] text-slate-400 bg-slate-950 px-2.5 py-1 rounded border border-slate-800">
             <Clock className="w-3.5 h-3.5 text-amber-400" />
@@ -122,7 +122,7 @@ export const DetectionComparison: React.FC<DetectionComparisonProps> = ({ initia
             onClick={() => runExperiment(delay)}
             disabled={loading}
             aria-label="Run early versus late detection benchmark comparison"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold transition shadow-md shadow-emerald-950/40 disabled:opacity-50 cursor-pointer text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+            className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold transition shadow-md shadow-emerald-950/40 disabled:opacity-50 cursor-pointer text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 min-h-[34px] w-full sm:w-auto"
           >
             {loading ? (
               <>
@@ -160,7 +160,7 @@ export const DetectionComparison: React.FC<DetectionComparisonProps> = ({ initia
               </span>
             </div>
 
-            <div className="flex items-center gap-4 text-[11px] text-slate-400">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-400">
               <span>
                 Peak Fire Reduction:{' '}
                 <strong className="text-emerald-400">
@@ -229,11 +229,11 @@ export const DetectionComparison: React.FC<DetectionComparisonProps> = ({ initia
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-1">
                   <span className="text-slate-400 flex items-center gap-1">
-                    <Users className="w-3.5 h-3.5 text-emerald-400" /> Resources Allocated:
+                    <Users className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Resources Allocated:
                   </span>
-                  <span className="font-semibold text-slate-300 text-[11px]">
+                  <span className="font-semibold text-slate-300 text-[11px] pl-4 sm:pl-0">
                     {data.early.firefightersAllocated} FF, {data.early.waterAllocated} kL Water, {data.early.dronesAllocated} Drones
                   </span>
                 </div>
@@ -300,11 +300,11 @@ export const DetectionComparison: React.FC<DetectionComparisonProps> = ({ initia
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-1">
                   <span className="text-slate-400 flex items-center gap-1">
-                    <Users className="w-3.5 h-3.5 text-rose-400" /> Resources Allocated:
+                    <Users className="w-3.5 h-3.5 text-rose-400 shrink-0" /> Resources Allocated:
                   </span>
-                  <span className="font-semibold text-slate-300 text-[11px]">
+                  <span className="font-semibold text-slate-300 text-[11px] pl-4 sm:pl-0">
                     {data.late.firefightersAllocated} FF, {data.late.waterAllocated} kL Water, {data.late.dronesAllocated} Drones
                   </span>
                 </div>
@@ -325,16 +325,16 @@ export const DetectionComparison: React.FC<DetectionComparisonProps> = ({ initia
 
           {/* Comparison Timeline Chart */}
           <div className="bg-slate-950 border border-slate-800 rounded-lg p-3.5 flex flex-col gap-2 shadow-inner">
-            <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-400">
               <span className="font-bold text-slate-300 uppercase">
                 Step-by-Step Fire Progression Timeline (Burned Cells Accumulation)
               </span>
-              <span className="text-[10px] text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">
+              <span className="hidden sm:inline-block text-[10px] text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">
                 DETERMINISTIC SIMULATION ENGINE (SEED 42)
               </span>
             </div>
 
-            <div className="w-full h-48 font-mono text-xs pt-2">
+            <div className="w-full min-w-0 h-48 font-mono text-xs pt-2 overflow-hidden">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={data.timeSeries} margin={{ top: 10, right: 20, left: -20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />

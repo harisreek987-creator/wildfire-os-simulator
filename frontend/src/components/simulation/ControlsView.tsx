@@ -237,35 +237,37 @@ export const ControlsView: React.FC<ControlsViewProps> = ({
             onSubmit={handleIgnite}
             className="md:col-span-6 flex flex-wrap sm:flex-nowrap items-center gap-3 bg-slate-950 p-3 rounded-lg border border-slate-800"
           >
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <label htmlFor="target-row" className="text-slate-400 text-[11px] font-bold">ROW:</label>
-              <input
-                id="target-row"
-                type="number"
-                min={0}
-                max={19}
-                value={targetRow}
-                onChange={(e) => setTargetRow(Number(e.target.value))}
-                className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-slate-200 text-center font-bold focus:border-red-500 focus:outline-none"
-              />
-            </div>
+            <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
+              <div className="flex items-center gap-2">
+                <label htmlFor="target-row" className="text-slate-400 text-[11px] font-bold">ROW:</label>
+                <input
+                  id="target-row"
+                  type="number"
+                  min={0}
+                  max={19}
+                  value={targetRow}
+                  onChange={(e) => setTargetRow(Number(e.target.value))}
+                  className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-slate-200 text-center font-bold focus:border-red-500 focus:outline-none min-h-[36px]"
+                />
+              </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <label htmlFor="target-col" className="text-slate-400 text-[11px] font-bold">COL:</label>
-              <input
-                id="target-col"
-                type="number"
-                min={0}
-                max={19}
-                value={targetCol}
-                onChange={(e) => setTargetCol(Number(e.target.value))}
-                className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-slate-200 text-center font-bold focus:border-red-500 focus:outline-none"
-              />
+              <div className="flex items-center gap-2">
+                <label htmlFor="target-col" className="text-slate-400 text-[11px] font-bold">COL:</label>
+                <input
+                  id="target-col"
+                  type="number"
+                  min={0}
+                  max={19}
+                  value={targetCol}
+                  onChange={(e) => setTargetCol(Number(e.target.value))}
+                  className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-slate-200 text-center font-bold focus:border-red-500 focus:outline-none min-h-[36px]"
+                />
+              </div>
             </div>
 
             <button
               type="submit"
-              className="w-full sm:w-auto flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 bg-red-600 hover:bg-red-500 active:bg-red-700 text-white font-bold rounded transition border border-red-500 shadow cursor-pointer text-xs"
+              className="w-full sm:w-auto flex-1 flex items-center justify-center gap-1.5 py-2 px-3 bg-red-600 hover:bg-red-500 active:bg-red-700 text-white font-bold rounded transition border border-red-500 shadow cursor-pointer text-xs min-h-[38px]"
             >
               <Flame className="w-3.5 h-3.5 fill-current" />
               IGNITE TARGET
@@ -298,12 +300,12 @@ export const ControlsView: React.FC<ControlsViewProps> = ({
 
       {/* 4. Scenario Presets Matrix */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-xl flex flex-col gap-3">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
           <div className="flex items-center gap-2 font-bold text-slate-200 uppercase tracking-wider text-xs">
             <Sparkles className="w-4 h-4 text-amber-400" />
             Curated Academic Scenario Matrix
           </div>
-          <span className="text-[11px] text-slate-400">
+          <span className="hidden sm:inline-block text-[11px] text-slate-400">
             Presets automatically reset and configure wind, speed &amp; ignition coordinates
           </span>
         </div>

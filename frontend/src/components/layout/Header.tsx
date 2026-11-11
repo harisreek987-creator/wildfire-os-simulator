@@ -73,16 +73,16 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="w-full bg-slate-900 border-b border-slate-800 px-3 sm:px-5 py-2.5 text-slate-100 flex items-center justify-between gap-3 shadow-lg sticky top-0 z-50">
       {/* Brand & Active View Indicator */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         <div className="p-1.5 sm:p-2 bg-gradient-to-br from-amber-500/20 to-orange-600/30 border border-amber-500/30 rounded-lg text-amber-500 flex items-center justify-center shadow-md shadow-amber-950/30">
           <Flame className="w-5 h-5 sm:w-6 sm:h-6 animate-pulse text-amber-500" />
         </div>
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <h1 className="text-sm sm:text-base font-bold tracking-wider uppercase text-slate-100 font-mono">
               Wildfire OS
             </h1>
-            <span className="px-1.5 py-0.5 text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase rounded bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-sm">
+            <span className="hidden sm:inline-block px-1.5 py-0.5 text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase rounded bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-sm">
               OPS CONSOLE
             </span>
             <span className="hidden sm:inline-block px-1.5 py-0.5 text-[9px] font-mono rounded bg-slate-800 text-slate-400 border border-slate-700">
@@ -95,10 +95,10 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Center Navigation Bar (Desktop & Tablet) */}
+      {/* Center Navigation Bar (Desktop) */}
       <nav
         aria-label="Console Views"
-        className="hidden md:flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 font-mono text-xs"
+        className="hidden xl:flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 font-mono text-xs"
       >
         {navItems.map((item) => {
           const isActive = currentTab === item.key
@@ -130,13 +130,13 @@ export const Header: React.FC<HeaderProps> = ({
       </nav>
 
       {/* Right Controls: Engine Status & Three-Dot Menu */}
-      <div className="flex items-center gap-2 font-mono text-xs">
+      <div className="flex items-center gap-1.5 sm:gap-2 font-mono text-xs shrink-0">
         {/* Backend Engine Status Badge */}
-        <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 shadow-sm">
+        <div className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg bg-slate-950 border border-slate-800 shadow-sm">
           <Server className="w-3.5 h-3.5 text-slate-400" />
           <span className="text-slate-400 hidden sm:inline">ENGINE:</span>
           <span
-            className={`flex items-center gap-1.5 font-bold text-[11px] ${
+            className={`flex items-center gap-1 sm:gap-1.5 font-bold text-[10px] sm:text-[11px] ${
               isConnected
                 ? 'text-emerald-400'
                 : isConnecting
@@ -145,7 +145,7 @@ export const Header: React.FC<HeaderProps> = ({
             }`}
           >
             <span
-              className={`w-2 h-2 rounded-full ${
+              className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${
                 isConnected
                   ? 'bg-emerald-400 animate-ping'
                   : isConnecting
@@ -160,10 +160,10 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onReconnect}
               title="Click to reconnect to simulation engine"
               aria-label="Reconnect to backend simulation engine"
-              className="ml-1 px-1.5 py-0.5 text-[10px] bg-rose-950/80 hover:bg-rose-900 active:bg-rose-950 text-rose-300 border border-rose-800 rounded transition cursor-pointer flex items-center gap-1 font-sans focus:outline-none focus-visible:ring-1 focus-visible:ring-rose-400"
+              className="ml-1 px-1.5 py-0.5 text-[10px] bg-rose-950/80 hover:bg-rose-900 active:bg-rose-950 text-rose-300 border border-rose-800 rounded transition cursor-pointer flex items-center gap-1 font-sans focus:outline-none focus-visible:ring-1 focus-visible:ring-rose-400 min-h-[26px]"
             >
               <RefreshCw className={`w-2.5 h-2.5 ${isConnecting ? 'animate-spin' : ''}`} />
-              <span>Retry</span>
+              <span className="hidden sm:inline">Retry</span>
             </button>
           )}
         </div>
@@ -176,7 +176,7 @@ export const Header: React.FC<HeaderProps> = ({
             aria-expanded={menuOpen}
             aria-haspopup="menu"
             aria-label="Toggle console navigation menu"
-            className={`p-2 rounded-lg border transition cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
+            className={`p-2 rounded-lg border transition cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 min-h-[38px] min-w-[38px] flex items-center justify-center ${
               menuOpen
                 ? 'bg-slate-800 text-amber-400 border-amber-500/50'
                 : 'bg-slate-950 text-slate-300 border-slate-800 hover:text-slate-100 hover:bg-slate-850'
@@ -205,7 +205,7 @@ export const Header: React.FC<HeaderProps> = ({
                       onSelectTab(item.key)
                       setMenuOpen(false)
                     }}
-                    className={`flex items-center justify-between w-full px-3 py-2 rounded-lg text-left transition cursor-pointer ${
+                    className={`flex items-center justify-between w-full px-3 py-2.5 min-h-[40px] rounded-lg text-left transition cursor-pointer ${
                       isActive
                         ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40'
                         : 'text-slate-300 hover:bg-slate-900 hover:text-white'

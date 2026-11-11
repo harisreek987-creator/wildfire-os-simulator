@@ -313,16 +313,16 @@ export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
                 {readyQueue.map((proc, index) => (
                   <div
                     key={proc.pid}
-                    className="p-2.5 bg-slate-950 border border-slate-800 rounded-lg flex items-center justify-between gap-3 hover:border-slate-700 transition"
+                    className="p-2.5 bg-slate-950 border border-slate-800 rounded-lg flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 hover:border-slate-700 transition"
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-full bg-blue-950/60 border border-blue-800/60 text-blue-300 font-bold flex items-center justify-center text-[10px]">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="w-6 h-6 rounded-full bg-blue-950/60 border border-blue-800/60 text-blue-300 font-bold flex items-center justify-center text-[10px] shrink-0">
                         #{index + 1}
                       </span>
-                      <div>
+                      <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-slate-200">{proc.name}</span>
-                          <span className="text-[10px] text-slate-500">PID #{proc.pid}</span>
+                          <span className="font-bold text-slate-200 truncate">{proc.name}</span>
+                          <span className="text-[10px] text-slate-500 shrink-0">PID #{proc.pid}</span>
                         </div>
                         <div className="text-[10px] text-slate-500 truncate max-w-[200px] sm:max-w-none">
                           {proc.description}
@@ -370,14 +370,14 @@ export const OSMonitorView: React.FC<OSMonitorViewProps> = ({
                 {waitingQueue.map((proc) => (
                   <div
                     key={proc.pid}
-                    className="p-2.5 bg-slate-950 border border-amber-950/40 rounded-lg flex items-center justify-between gap-3"
+                    className="p-2.5 bg-slate-950 border border-amber-950/40 rounded-lg flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5"
                   >
-                    <div className="flex items-center gap-2.5">
-                      <span className="px-1.5 py-0.5 rounded bg-slate-900 text-slate-400 text-[10px] font-bold border border-slate-800">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="px-1.5 py-0.5 rounded bg-slate-900 text-slate-400 text-[10px] font-bold border border-slate-800 shrink-0">
                         #{proc.pid}
                       </span>
-                      <div>
-                        <div className="font-bold text-slate-200">{proc.name}</div>
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-200 truncate">{proc.name}</div>
                         <div className="text-[10px] text-slate-500 truncate max-w-[200px] sm:max-w-none">
                           {proc.description}
                         </div>
