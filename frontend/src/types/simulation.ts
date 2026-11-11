@@ -1,5 +1,13 @@
 export type CellState = 'healthy' | 'burning' | 'burned' | 'water'
 
+export type NavigationTab =
+  | 'overview'
+  | 'os-monitor'
+  | 'analytics'
+  | 'sensors'
+  | 'controls'
+  | 'system'
+
 export interface GridCell {
   x: number
   y: number
@@ -37,6 +45,12 @@ export interface VirtualProcess {
   lastRunAt?: number | null
   executionCount?: number
   waitingReason?: string | null
+}
+
+export interface ExecutionTickRecord {
+  tick: number
+  pid: number | null
+  processName: string
 }
 
 export type EventSeverity = 'info' | 'warning' | 'alert' | 'success'
