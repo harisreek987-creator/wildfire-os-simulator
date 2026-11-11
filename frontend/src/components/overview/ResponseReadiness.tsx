@@ -222,3 +222,4 @@ export const ResponseReadiness: React.FC<ResponseReadinessProps> = ({ resources,
     </div>
   )
 }
+

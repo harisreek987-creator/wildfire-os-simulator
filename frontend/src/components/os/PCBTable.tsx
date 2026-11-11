@@ -268,3 +268,4 @@ export const PCBTable: React.FC<PCBTableProps> = ({ processes, runningProcessPid
     </div>
   )
 }
+
